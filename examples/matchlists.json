@@ -1,0 +1,108 @@
+{
+  "dataType": "/matchlists/by-account/{acc-id}",
+  "matches": [
+    {
+      "lane": "MID",
+      "gameId": 3204881532,
+      "champion": 91,
+      "platformId": "KR",
+      "timestamp": 1526300643513,
+      "queue": 420,
+      "role": "SOLO",
+      "season": 11
+    },
+    {
+      "lane": "NONE",
+      "gameId": 3204826907,
+      "champion": 39,
+      "platformId": "KR",
+      "timestamp": 1526299161855,
+      "queue": 420,
+      "role": "DUO_SUPPORT",
+      "season": 11
+    },
+    {
+      "lane": "TOP",
+      "gameId": 3204819662,
+      "champion": 122,
+      "platformId": "KR",
+      "timestamp": 1526297506020,
+      "queue": 420,
+      "role": "SOLO",
+      "season": 11
+    },
+    {
+      "lane": "TOP",
+      "gameId": 3204795137,
+      "champion": 58,
+      "platformId": "KR",
+      "timestamp": 1526295429295,
+      "queue": 420,
+      "role": "DUO",
+      "season": 11
+    },
+    {
+      "lane": "JUNGLE",
+      "gameId": 3204759122,
+      "champion": 142,
+      "platformId": "KR",
+      "timestamp": 1526293416737,
+      "queue": 420,
+      "role": "NONE",
+      "season": 11
+    },
+    {
+      "lane": "MID",
+      "gameId": 3204660759,
+      "champion": 142,
+      "platformId": "KR",
+      "timestamp": 1526279371934,
+      "queue": 420,
+      "role": "SOLO",
+      "season": 11
+    },
+    {
+      "lane": "MID",
+      "gameId": 3204618262,
+      "champion": 105,
+      "platformId": "KR",
+      "timestamp": 1526277459252,
+      "queue": 420,
+      "role": "SOLO",
+      "season": 11
+    },
+    {
+      "lane": "MID",
+      "gameId": 3204615963,
+      "champion": 39,
+      "platformId": "KR",
+      "timestamp": 1526275537578,
+      "queue": 420,
+      "role": "SOLO",
+      "season": 11
+    },
+    {
+      "lane": "MID",
+      "gameId": 3204603866,
+      "champion": 39,
+      "platformId": "KR",
+      "timestamp": 1526273463355,
+      "queue": 420,
+      "role": "SOLO",
+      "season": 11
+    },
+    {
+      "lane": "MID",
+      "gameId": 3204573043,
+      "champion": 105,
+      "platformId": "KR",
+      "timestamp": 1526271228760,
+      "queue": 420,
+      "role": "SOLO",
+      "season": 11
+    }
+  ],
+  "endIndex": 10,
+  "startIndex": 0,
+  "totalGames": 120
+}
