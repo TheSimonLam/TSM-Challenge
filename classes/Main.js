@@ -4,7 +4,7 @@ import fetch from 'node-fetch';
 let options = {
     method: 'GET',
     headers: {
-        "X-Riot-Token": "RGAPI-b2405678-de6d-4f9d-8bd9-69e2ce1b050b"
+        "X-Riot-Token": "RGAPI-53affd44-1622-4afc-be6e-2564ae152855"
     }
 };
 
@@ -46,41 +46,136 @@ export class Main{
                 for (let participant of data.participantIdentities) {
                     if(participant.player.accountId === this.accountId){
                         match.setMatchHistroyLink(participant.player.matchHistoryUri);
-                        // match.setMatchup(data.participants);
-                        // match.setFullBuild();
-                        // match.setTeamComp();
-                        // match.setSummonerSpells();
-                        // match.setRunes();
-                        // match.setWinLoss();
-                        console.log(match);
-                        // this.getTimelineMatch(match);
+                        match.setParticipantIdAndBlueSide(participant.participantId);
+                        match.setLane(this.generateLane(data.participants, match.participantId));
+                        match.setTeamComps(this.generateTeamComps(data.participants));
+                        match.setMatchupChamp(this.generateMatchup(data.participants, match.participantId,  match.lane, match.teamCompAlly));
+                        match.setFullBuild(this.generateFullBuild(data.participants, match.participantId));
+                        match.setSummonerSpells(this.generateSummonerSpells(data.participants, match.participantId));
+                        match.setRunes(this.generateRunes(data.participants, match.participantId));
+                        match.setWin(this.generateWin(data.participants, match.participantId));
+
+                        this.getTimelineMatch(match);
                     }
                 }
             }.bind(this));
     }
 
-    // getMatch(match){
-    //     fetch('https://' + this.region + '.api.riotgames.com/lol/match/v3/timelines/by-match/' + match.matchId, options)
-    //         .then(res => res.json())
-    //         .then(function(data){
-    //             for (let frame of data.frames) {
-    //                 for (let events of frame) {
-    //                     if(events.participantId === match.participantId){
-    //                         match.setCompletedItemsPath();
-    //                         match.setSkillOrder();
-    //
-    //                         //TODO: CALL SAVE HERE!
-    //                         this.save();
-    //                     }
-    //                 }
-    //             }
-    //         }.bind(this));
-    //
-    //
-    // }
+    getTimelineMatch(match){
+        fetch('https://' + this.region + '.api.riotgames.com/lol/match/v3/timelines/by-match/' + match.matchId, options)
+            .then(res => res.json())
+            .then(function(data){
+                match.setCompletedItemsPath(this.generateCompletedItems(data.frames, match.participantId));
+                match.setSkillOrder(this.generateSkillOrder(data.frames, match.participantId));
 
-    save(){
-        //TODO: save this.matches[] along with the player name to file!
+                this.save(match);
+            }.bind(this));
+    }
+
+    generateCompletedItems(frames, participantId){
+        let itemsPurchased = [];
+        for (let frame of frames) {
+            for (let event of frame.events) {
+                if(event.participantId === participantId && event.type === "ITEM_PURCHASED"){
+                    itemsPurchased.push(event.itemId);
+                }
+            }
+        }
+        return itemsPurchased;
+    }
+
+    generateSkillOrder(frames, participantId){
+        let skills = [];
+        for (let frame of frames) {
+            for (let event of frame.events) {
+                if(event.participantId === participantId && event.type === "SKILL_LEVEL_UP"){
+                    skills.push(event.skillSlot);
+                }
+            }
+        }
+        return skills;
+    }
+
+    generateLane(participants, participantId){
+        for (let participant of participants) {
+            if(participant.participantId === participantId){
+                return participant.timeline.lane;
+            }
+        }
+    }
+
+    generateMatchup(participants, participantId, lane, teamCompAlly){
+        for (let participant of participants) {
+            for(let i=0;i<teamCompAlly.length; i++) {
+                if(participant.championId !== teamCompAlly[i]){
+                    if((participant.participantId !== participantId) && (participant.timeline.lane === lane)){
+                        return participant.championId;
+                    }
+                }
+            }
+        }
+    }
+
+    generateFullBuild(participants, participantId){
+        let itemArray = [];
+        for (let participant of participants) {
+            if(participant.participantId === participantId){
+                itemArray.push(participant.stats.item0);
+                itemArray.push(participant.stats.item1);
+                itemArray.push(participant.stats.item2);
+                itemArray.push(participant.stats.item3);
+                itemArray.push(participant.stats.item4);
+                itemArray.push(participant.stats.item5);
+            }
+        }
+        return itemArray;
+    }
+
+    generateTeamComps(participants){
+        let teamComps = [];
+        for (let participant of participants) {
+            teamComps.push(participant.championId);
+        }
+        return teamComps;
+    }
+
+    generateSummonerSpells(participants, participantId){
+        let summonerSpells = [];
+        for (let participant of participants) {
+            if(participant.participantId === participantId){
+                summonerSpells.push(participant.spell1Id);
+                summonerSpells.push(participant.spell2Id);
+            }
+        }
+        return summonerSpells;
+    }
+
+    generateRunes(participants, participantId){
+        let runes = [];
+        for (let participant of participants) {
+            if(participant.participantId === participantId){
+                runes.push(participant.stats.perk0);
+                runes.push(participant.stats.perk1);
+                runes.push(participant.stats.perk2);
+                runes.push(participant.stats.perk3);
+                runes.push(participant.stats.perk4);
+                runes.push(participant.stats.perk5);
+            }
+        }
+        return runes;
+    }
+
+    generateWin(participants, participantId){
+        for (let participant of participants) {
+            if(participant.participantId === participantId){
+                return participant.stats.win;
+            }
+        }
+    }
+
+    save(match){
+        console.log(match);
+        // console.log(match.getJson());
     }
 }
 
