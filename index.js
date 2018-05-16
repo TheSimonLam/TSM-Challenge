@@ -1,11 +1,11 @@
 import {Main} from "./classes/Main";
-import playersData from "./playersData";
+import players from "./static/players";
 let playerCount = 0;
 
 function loop(){
-    if(playerCount < playersData.players.length){
-        let playerName = playersData.players[playerCount].name;
-        let playerRegion = playersData.players[playerCount].region;
+    if(playerCount < players.length){
+        let playerName = players[playerCount].name;
+        let playerRegion = players[playerCount].region;
 
         new Main(playerName, playerRegion);
 

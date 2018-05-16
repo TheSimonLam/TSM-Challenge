@@ -4,7 +4,7 @@ import fetch from 'node-fetch';
 let options = {
     method: 'GET',
     headers: {
-        "X-Riot-Token": "RGAPI-53affd44-1622-4afc-be6e-2564ae152855"
+        "X-Riot-Token": "RGAPI-45672fb8-27d6-43f0-82b6-a5d108ff8ea0"
     }
 };
 
@@ -45,6 +45,7 @@ export class Main{
 
                 for (let participant of data.participantIdentities) {
                     if(participant.player.accountId === this.accountId){
+                        match.setSummonerName(participant.player.summonerName);
                         match.setMatchHistroyLink(participant.player.matchHistoryUri);
                         match.setParticipantIdAndBlueSide(participant.participantId);
                         match.setLane(this.generateLane(data.participants, match.participantId));
