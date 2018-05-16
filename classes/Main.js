@@ -31,7 +31,7 @@ export class Main{
             .then(res => res.json())
             .then(function(data){
                 for (let match of data.matches) {
-                    let currentMatch = new Match(match.timestamp, match.champion, match.gameId);
+                    let currentMatch = new Match(match.timestamp, match.champion, match.gameId, match.platformId, this.region, this.accountId);
                     this.getMatch(currentMatch);
                 }
             }.bind(this));
@@ -46,7 +46,6 @@ export class Main{
                 for (let participant of data.participantIdentities) {
                     if(participant.player.accountId === this.accountId){
                         match.setSummonerName(participant.player.summonerName);
-                        match.setMatchHistroyLink(participant.player.matchHistoryUri);
                         match.setParticipantIdAndBlueSide(participant.participantId);
                         match.setLane(this.generateLane(data.participants, match.participantId));
                         match.setTeamComps(this.generateTeamComps(data.participants));

@@ -5,7 +5,9 @@ import masteries from "../static/masteries";
 
 export class Match{
 
-    constructor(timestamp, champCode, matchId){
+    constructor(timestamp, champCode, matchId, platform, region, accountId){
+        this.platform = platform;
+        this.region = region;
         this.matchId = matchId;
         this.date = this.generateFormattedDate(timestamp);
         this.champ = this.translateChampCode(champCode);
@@ -17,8 +19,6 @@ export class Match{
         this.teamCompAlly = null;
         this.completedItemsPath = null;
         this.fullBuild = null;
-        this.historyLink = null;
-        this.summonerSpells = null;
         this.masteries = null;
         this.skillOrder = null;
         this.win = null;
@@ -26,7 +26,9 @@ export class Match{
         this.blueSide = null;
         this.summonerSpell1 = null;
         this.summonerSpell2 = null;
-        this.skillOrderMax;
+        this.skillOrderMax = null;
+        this.accountId = accountId;
+        this.matchHistoryLink = "http://matchhistory.leagueoflegends.co." + this.region + "/ko/#match-details/" + this.platform + "/" + this.matchId + "/" + this.accountId;
     }
 
     setSummonerName(name){this.summonerName = name;}
@@ -37,7 +39,6 @@ export class Match{
         id <= 5 ? this.blueSide = true : this.blueSide = false;
     }
     setFullBuild(itemArray){this.fullBuild = this.generateItems(itemArray);}
-    setMatchHistroyLink(matchHistoryUri){this.historyLink = matchHistoryUri;}
     setSummonerSpells(summonerSpellsArray){
         this.summonerSpell1 = this.translateSummonerSpell(summonerSpellsArray[0]);
         this.summonerSpell2 = this.translateSummonerSpell(summonerSpellsArray[1]);
@@ -45,7 +46,10 @@ export class Match{
     setRunes(masteriesArray){this.masteries = this.generateMasteryCodes(masteriesArray);}
     setWin(win){this.win = win;}
     setCompletedItemsPath(itemsArray){this.completedItemsPath = this.generateItems(itemsArray);}
-    setSkillOrder(skillOrderArray){this.skillOrder = skillOrderArray;}
+    setSkillOrder(skillOrderArray){
+        this.skillOrder = this.generateSkillOrder(skillOrderArray);
+        this.skillOrderMax = this.generateSkillOrderMax(this.skillOrder);
+    }
     setLane(lane){this.lane = lane;}
     setTeamComps(comps){
         if(this.blueSide){
@@ -56,6 +60,56 @@ export class Match{
             this.teamCompEnemy = this.generateTeamComps(comps.slice(0, 5));
             this.teamCompAlly = this.generateTeamComps(comps.slice(5, 10));
         }
+    }
+
+    generateSkillOrderMax(skillOrderArray){
+        let maxArray = [],
+            q = 0, w = 0, e = 0, r = 0,
+            qMaxed = false, wMaxed = false, eMaxed = false, rMaxed = false;
+
+        for (let skill of skillOrderArray) {
+            switch (skill) {
+                case "Q":
+                    q++;
+                    break;
+                case "W":
+                    w++;
+                    break;
+                case "E":
+                    e++;
+                    break;
+                case "R":
+                    r++;
+                    break;
+            }
+
+            if(q === 4 && !qMaxed){
+                maxArray.push("Q");
+                qMaxed = true;
+            }
+            else if(w === 4 && !wMaxed){
+                maxArray.push("W");
+                wMaxed = true;
+            }
+            else if(e === 4 && !eMaxed){
+                maxArray.push("E");
+                eMaxed = true;
+            }
+            else if(r === 4 && !rMaxed){
+                maxArray.push("R");
+                rMaxed = true;
+            }
+
+        }
+        return maxArray;
+    }
+
+    generateSkillOrder(skillOrderArray){
+        let translatedSkillOrderArray = [];
+        for (let skillOrderCode of skillOrderArray) {
+            translatedSkillOrderArray.push(this.translateSkillOrderCode(skillOrderCode));
+        }
+        return translatedSkillOrderArray;
     }
 
     generateMasteryCodes(masteriesArray){
