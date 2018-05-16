@@ -8,7 +8,7 @@ let options = {
         "X-Riot-Token": "RGAPI-45672fb8-27d6-43f0-82b6-a5d108ff8ea0"
     }
 },
-    MAX_MATCHES_TO_GET = 30;
+    MAX_MATCHES_TO_GET = 20;
 
 export class Main{
 
