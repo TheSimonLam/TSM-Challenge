@@ -7,7 +7,9 @@ function loop(){
         let playerName = players[playerCount].name;
         let playerRegion = players[playerCount].region;
 
-        new Main(playerName, playerRegion);
+        let main = new Main(playerName, playerRegion);
+
+        main.save();
 
         playerCount++;
     }
@@ -16,4 +18,4 @@ function loop(){
     }
 }
 
-var myInterval = setInterval(loop, 1000);
+var myInterval = setInterval(loop, 10000);

@@ -68,7 +68,7 @@ export class Main{
                 match.setCompletedItemsPath(this.generateCompletedItems(data.frames, match.participantId));
                 match.setSkillOrder(this.generateSkillOrder(data.frames, match.participantId));
 
-                this.save(match);
+                this.matches.push(match.getJson());
             }.bind(this));
     }
 
@@ -173,9 +173,8 @@ export class Main{
         }
     }
 
-    save(match){
-        console.log(match);
-        // console.log(match.getJson());
+    save(){
+        console.log(this.matches);
     }
 }
 

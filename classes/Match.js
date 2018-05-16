@@ -209,8 +209,28 @@ export class Match{
 
     getJson(){
         return {
-            "date": this.date,
-            "champ": this.champ
+            "Player": this.summonerName,
+            "Champ": this.champ,
+            "Patch": this.patch,
+            "Date": this.date,
+            "VS": this.matchupChamp,
+            "Enemy Team": this.teamCompEnemy,
+            "Item Slot 1": this.fullBuild[0] || " ",
+            "Item Slot 2": this.fullBuild[1] || " ",
+            "Item Slot 3": this.fullBuild[2] || " ",
+            "Item Slot 4": this.fullBuild[3] || " ",
+            "Item Slot 5": this.fullBuild[4] || " ",
+            "Item Slot 6": this.fullBuild[5] || " ",
+            "Build Order": this.completedItemsPath,
+            "Mastery 1": this.masteries[0],
+            "Mastery 2": this.masteries[1],
+            "Mastery 3": this.masteries[2],
+            "Mastery 4": this.masteries[3],
+            "Mastery 5": this.masteries[4],
+            "Mastery 6": this.masteries[5],
+            "Max": this.skillOrderMax,
+            "Skill Order": this.skillOrder.toString()
+
         }
     }
 }
