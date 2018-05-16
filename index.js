@@ -9,8 +9,6 @@ function loop(){
 
         let main = new Main(playerName, playerRegion);
 
-        main.save();
-
         playerCount++;
     }
     else{

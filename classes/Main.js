@@ -1,12 +1,14 @@
 import {Match} from './Match';
 import fetch from 'node-fetch';
+let fs = require("fs");
 
 let options = {
     method: 'GET',
     headers: {
         "X-Riot-Token": "RGAPI-45672fb8-27d6-43f0-82b6-a5d108ff8ea0"
     }
-};
+},
+    MAX_MATCHES_TO_GET = 30;
 
 export class Main{
 
@@ -14,7 +16,9 @@ export class Main{
         this.name = name;
         this.region = region;
         this.accountId = '';
-        this.matches = [];
+        this.matches = {
+            "playerMatches": []
+        };
 
         this.getAccountIds();
     }
@@ -27,7 +31,7 @@ export class Main{
 
     getMatchList(data){
         this.accountId = data.accountId;
-        fetch('https://' + this.region + '.api.riotgames.com/lol/match/v3/matchlists/by-account/'+ this.accountId + '?beginIndex=0&endIndex=5&queue=420', options)
+        fetch('https://' + this.region + '.api.riotgames.com/lol/match/v3/matchlists/by-account/'+ this.accountId + '?beginIndex=0&endIndex='+ MAX_MATCHES_TO_GET +'&queue=420', options)
             .then(res => res.json())
             .then(function(data){
                 for (let match of data.matches) {
@@ -62,14 +66,21 @@ export class Main{
     }
 
     getTimelineMatch(match){
-        fetch('https://' + this.region + '.api.riotgames.com/lol/match/v3/timelines/by-match/' + match.matchId, options)
-            .then(res => res.json())
-            .then(function(data){
-                match.setCompletedItemsPath(this.generateCompletedItems(data.frames, match.participantId));
-                match.setSkillOrder(this.generateSkillOrder(data.frames, match.participantId));
+        setTimeout(() => {
+            fetch('https://' + this.region + '.api.riotgames.com/lol/match/v3/timelines/by-match/' + match.matchId, options)
+                .then(res => res.json())
+                .then(function(data){
+                    match.setCompletedItemsPath(this.generateCompletedItems(data.frames, match.participantId));
+                    match.setSkillOrder(this.generateSkillOrder(data.frames, match.participantId));
 
-                this.matches.push(match.getJson());
-            }.bind(this));
+                    this.matches.playerMatches.push(match.getJson());
+
+                    if(this.matches.playerMatches.length === MAX_MATCHES_TO_GET){
+                        this.save();
+                    }
+
+                }.bind(this));
+        }, 500);
     }
 
     generateCompletedItems(frames, participantId){
@@ -174,7 +185,10 @@ export class Main{
     }
 
     save(){
-        console.log(this.matches);
+        let json = JSON.stringify(this.matches);
+        fs.writeFile('output.json', json, 'utf8', function(){
+            console.log("Done!");
+        });
     }
 }
 

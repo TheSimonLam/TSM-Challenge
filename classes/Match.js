@@ -215,6 +215,7 @@ export class Match{
             "Date": this.date,
             "VS": this.matchupChamp,
             "Enemy Team": this.teamCompEnemy,
+            "Ally Team": this.teamCompAlly,
             "Item Slot 1": this.fullBuild[0] || " ",
             "Item Slot 2": this.fullBuild[1] || " ",
             "Item Slot 3": this.fullBuild[2] || " ",
@@ -229,8 +230,12 @@ export class Match{
             "Mastery 5": this.masteries[4],
             "Mastery 6": this.masteries[5],
             "Max": this.skillOrderMax,
-            "Skill Order": this.skillOrder.toString()
-
+            "Skill Order": this.skillOrder.toString(),
+            "Victory": this.win,
+            "Blue Side": this.blueSide,
+            "Summ Spell 1": this.summonerSpell1,
+            "Summ Spell 2": this.summonerSpell2,
+            "Match Link": this.matchHistoryLink
         }
     }
 }
